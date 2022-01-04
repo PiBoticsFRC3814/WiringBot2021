@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CoderMotor;
@@ -13,6 +14,7 @@ public class SetPos extends CommandBase {
   CoderMotor m_CoderMotor;
   double setPoint = 0;
   double location = 0;
+  int counter = 0;
 
   public SetPos(CoderMotor cmSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,38 +24,31 @@ public class SetPos extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     location = m_CoderMotor.getPosition();
-    SmartDashboard.getNumber("Setpoint", setPoint);
-    if (location > setPoint)
+    setPoint = SmartDashboard.getNumber("Setpoint", 0);
+    SmartDashboard.putNumber("Location Degrees", location);
+    if (setPoint + 5 < location)
     {
-      if (location < setPoint + 5)
-      {
-        m_CoderMotor.setSpeed(0.2);
-      }
-      else
-      {
-        m_CoderMotor.setSpeed(0.5);
-      }
+      m_CoderMotor.setSpeed(0.1);
+      counter = 0;
     }
-    else if (location < setPoint)
+    else if (setPoint - 5 > location)
     {
-      if (location > setPoint - 5)
-      {
-        m_CoderMotor.setSpeed(-0.2);
-      }
-      else
-      {
-        m_CoderMotor.setSpeed(-0.5);
-      }
+
+       m_CoderMotor.setSpeed(-0.1);
+       counter = 0;
     }
     else
     {
       m_CoderMotor.setSpeed(0.0);
+      counter++;
     }
   }
 
@@ -64,6 +59,13 @@ public class SetPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (counter >= 1000)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 }

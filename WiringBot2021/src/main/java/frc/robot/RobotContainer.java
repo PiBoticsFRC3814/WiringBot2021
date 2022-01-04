@@ -32,6 +32,7 @@ public class RobotContainer {
     // Configure the button bindings
     m_coderMotor.setDefaultCommand(new GetEncoderPos(m_coderMotor));
     SmartDashboard.putBoolean("SpinMotor", false);
+    SmartDashboard.putBoolean("PositionControl", false);
     configureButtonBindings();
   }
 
@@ -43,9 +44,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     final NetworkButton SpinMotor = new NetworkButton("SmartDashboard", "SpinMotor");
+    final NetworkButton Position = new NetworkButton("SmartDashboard", "PositionControl");
 
     SpinMotor.whenPressed(new SpinMotor(m_coderMotor));
     SpinMotor.whenReleased(new StopMotor(m_coderMotor));
+
+    Position.whenPressed(new SetPos(m_coderMotor));
+    Position.whenReleased(new StopMotor(m_coderMotor));
   }
 
   /**

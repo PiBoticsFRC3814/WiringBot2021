@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class CoderMotor extends SubsystemBase {
@@ -18,6 +19,7 @@ public class CoderMotor extends SubsystemBase {
   public CoderMotor() {
     coderMotor = new WPI_TalonSRX(Constants.CoderMotor);
     encoder = new CANCoder(Constants.CanCoder1);
+    coderMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public double getPosition() {
